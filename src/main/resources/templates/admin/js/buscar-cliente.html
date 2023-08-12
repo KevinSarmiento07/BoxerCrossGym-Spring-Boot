@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<script th:if="${pago.cliente == null}" type="text/javascript" th:fragment="javascript">
+
+$(document).ready(
+
+	    function (){
+
+
+	        $("#buscar_persona").autocomplete({
+
+
+	            source: function(request, response){
+
+	                $.ajax({
+
+	                    url: "/pago/buscar-cliente/" + request.term,
+	                    dataType: "json",
+	                    data:{
+	                        term: request.term
+	                    },
+	                    success: function(data){
+	                        response($.map(data,function(item){
+	                            return {
+	                                value: item.id,
+	                                label: item.nombre + " " + item.apellido,
+	                                apellido: item.apellido
+	                            }
+	                        }));
+	                    }
+	                });
+
+
+	            },
+	            select: function(event, ui){
+
+	                $("#buscar_persona").val(ui.item.label);
+	                
+	                $('#cliente_id').val(ui.item.value);
+	                return false;
+	            }
+
+
+	        });
+	    }
+
+
+
+
+	);
+
+
+
+</script>
+</body>
+</html>

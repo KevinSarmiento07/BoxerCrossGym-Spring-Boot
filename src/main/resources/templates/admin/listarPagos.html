@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/plantilla.html :: head}">
+
+</head>
+<body>
+
+
+<header th:replace="~{layout/plantilla.html :: header}"></header>
+
+<div class="container mb-3">
+
+
+	<div class="card mt-3">
+		<h1  class="card-header text-center my-4 fs-1"> <span th:text="${titulo}"></span> <i class="fa-solid fa-file-invoice-dollar"></i> </h1>
+		
+		<form class="mt-4" th:action="@{/pago/listar}">
+		 <div class="row g-3 align-items-center">
+		  <div class="col-auto">
+		    <label for="termino" class="col-form-label">Filtrar por:</label>
+		  </div>
+		  <div class="col-auto">
+		  <select class="form-select" name="termino" id="termino" >
+		  <option value="">Seleccionar ...</option>
+		  	<option th:value="vencido">Vencidos</option>
+		  	<option th:value="activo">Activos</option>
+		  	<option th:value="nombre">Nombre del Cliente</option>
+		  </select>
+		    <!-- <input type="text" id="termino" name="termino" class="form-control" th:value="${termino}"> -->
+		  </div>
+		  <div class="col-auto">
+		    <button type="submit" class="btn bg-dark text-white">Buscar</button>
+		  </div>
+		</div>
+</form>
+	
+		<div class="card-body">
+			<a type="button" class="btn bg-black text-white mt-4 col-2" th:href="@{/pago/agregar}">Agregar Pago <i class="fa-solid fa-file-invoice-dollar"></i>  </a>
+		<table class="table table-sm table-striped table-bordered  my-4">
+			<thead class="table-dark text-center">
+				<tr>
+					<th>ID</th>
+					<th>Cliente</th>
+					<th>PLan</th>
+					<th>Tipo de Pago</th>
+					<th>Valor Pagado</th>
+					<th>Fecha de Pago</th>
+					<th>Fecha de Vencimiento</th>
+					<th>Estado</th>
+					<th>Editar</th>
+				</tr>
+			</thead>
+			<tbody class="table-group-divider text-center">
+				<tr th:each="pago : ${pagos}">
+					<td th:text="${pago.id}"> </td>
+					<td th:text="${pago.cliente.nombre} + ' ' + ${pago.cliente.apellido}"></td>
+					<td th:text="${pago.plan.nombre}"></td>
+					<td th:text="${pago.tipoPago.descripcion}"></td>
+					<td th:text="'$' + ${pago.valorPagado}"></td>
+					<td th:text="${pago.fechaPago}"></td>
+					<td th:text="${pago.fechaVencimiento}"></td>
+					<td th:class="${pago.estadoPago() == true} ? 'bg-success' : 'bg-danger'"></td>
+					<td><a th:href="@{/pago/editar/{id}(id = ${pago.id})}" class="btn bg-black text-white"> <i class="fa-regular fa-pen-to-square"></i></a> </td>
+				</tr>
+			</tbody>
+		</table>
+		
+		</div>
+	</div>
+	
+	
+	
+	</div>
+	<nav th:replace="~{layout/paginator-nav.html :: paginator}"></nav>
+	</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace ="~{layout/plantilla.html :: head}">
+
+</head>
+<body>
+
+<header th:replace ="~{layout/plantilla.html :: header}"></header>
+
+
+
+<div class="container my-4">
+
+	<div class="card">
+		
+		<div class="card-header fs-2 text-center fw-bold" th:text="${titulo}"></div>
+		
+		<div class="card-body">
+		
+		<h4 class="card-title d-inline"> <a th:href="@{/listar}" class="btn bg-black text-white"> <i class="fa-solid fa-left-long"></i> Volver</a></h4>
+		<h4 class="card-title d-inline"><a th:href="@{/editar/{id}(id = ${cliente.id})}" class="btn btn-warning"> Editar<i class="fa-solid fa-user-pen"></i></a></h4>
+		
+		<ul class="list-group list-group-horizontal-sm mt-4">
+			<li class="list-group-item fs-4 fw-bold col-3">Nombre</li>
+			<li class="list-group-item fs-4 col-9" th:text="${cliente.nombre + ' ' + cliente.apellido}">prueba</li>
+		</ul >
+			
+		<ul class="list-group list-group-horizontal-sm my-2">
+			<li class="list-group-item fs-4 fw-bold col-3">Fecha de Nacimiento:</li>
+			<li class="list-group-item fs-4 col-9" th:text="${cliente.fechaNacimiento}" >prueba</li>
+		</ul>
+		<ul class="list-group list-group-horizontal-sm my-2">
+			<li class="list-group-item fs-4 fw-bold col-3">Fecha de Inscripción:</li>
+			<li class="list-group-item fs-4 col-9" th:text="${cliente.fechaInscripcion}" >prueba</li>
+		</ul>
+		<ul class="list-group list-group-horizontal-sm my-2">
+			<li class="list-group-item fs-4 fw-bold col-3">Sexo:</li>
+			<li  class="list-group-item fs-4 col-9" th:text="${cliente.sexo == 'M'} ? 'Masculino' : 'Femenino'" >prueba</li>
+		</ul>
+		<ul class="list-group list-group-horizontal-sm my-2">
+			<li class="list-group-item fs-4 fw-bold col-3">Telefono:</li>
+			<li  class="list-group-item fs-4 col-9" th:text="${cliente.telefono}" >prueba</li>
+		</ul>
+		<ul class="list-group list-group-horizontal-sm my-2">
+			<li class="list-group-item fs-4 fw-bold col-3">Documento de Identidad:</li>
+			<li  class="list-group-item fs-4 col-9" th:text="${cliente.cedula}" >prueba</li>
+		</ul>
+		<ul class="list-group list-group-horizontal-sm my-2">
+			<li class="list-group-item fs-4 fw-bold col-3">Email:</li>
+			<li  class="list-group-item fs-4 col-9" th:text="${cliente.email}" >prueba</li>
+		</ul>
+		<ul class="list-group list-group-horizontal-sm my-2" th:if="${cliente.antecedente != '' or cliente.antecedente != null}">
+			<li class="list-group-item fs-4 fw-bold col-3">Información Personal:</li>
+			<li  class="list-group-item fs-4 col-9" th:text="${cliente.antecedente}" >prueba</li>
+		</ul>
+		
+		</div>
+	
+	</div>
+	
+	<table th:if="${!cliente.pagos.isEmpty()}" class="table table-sm table-striped table-bordered border-black my-4">
+
+              <thead class="table-dark fs-4 text-center">
+                <tr>
+                  <th>Valor Pagado</th>
+                  <th>Fecha de Pago</th>
+                  <th>Fecha de Vencimento</th>
+                  <th>Plan</th>
+                  <th>Tipo de Pago</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+
+              <tbody>
+              
+              <tr th:each="pago : ${cliente.pagos}" class="fs-5 text-center fw-bold">
+              
+              	<td th:text=" '$' + ${pago.valorPagado}" ></td>
+              	<td th:text="${pago.fechaPago}"></td>
+              	<td th:text="${pago.fechaVencimiento}"></td>
+              	<td th:text="${pago.plan.nombre}"></td>
+              	<td th:text="${pago.tipoPago.descripcion}"></td>
+              	<td th:class="${pago.estadoPago() == true} ? 'bg-success' : 'bg-danger'"></td>
+              </tr>
+                
+
+              </tbody>
+
+            </table>
+
+
+
+</div>
+
+
+
+</body>
+</html>
