@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/plantilla.html :: head}">
+
+
+</head>
+
+
+
+<body>
+
+	<header th:replace="~{layout/plantilla.html :: section-header}"></header>
+
+	<div class="container d-flex align-items-center justify-content-center vh-100">
+
+		
+		<div class="card">
+				<h1 th:text="${titulo}" class="text-center fw-bold font-monospace"></h1>
+			<div class="card-header text-center">Inicio de Sesión</div>
+				
+			<div class="card-body">
+
+				<form method="post" th:action="@{/login}">
+					<div class="mb-3">
+						<label for="username" class="form-label">Email address</label> <input
+							type="text" class="form-control" id="username" name="username">
+						<div id="emailHelp" class="form-text">We'll never share your
+							email with anyone else.</div>
+					</div>
+					<div class="mb-3">
+						<label for="password" class="form-label">Password</label> <input
+							type="password" class="form-control" id="password"
+							name="password">
+					</div>
+
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</form>
+			</div>
+		</div>
+
+
+	</div>
+
+
+
+	<!-- -------------------    -->
+
+
+
+
+	
+
+
+
+	<!-- 
+
+<div class="container">
+      <form class="form-signin" method="post" action="/login">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <p>
+          <label for="username" class="sr-only">Username</label>
+          <input type="text" id="username" name="username" class="form-control" placeholder="Username" required="" autofocus="">
+        </p>
+        <p>
+          <label for="password" class="sr-only">Password</label>
+          <input type="password" id="password" name="password" class="form-control" placeholder="Password" required="">
+        </p>
+<input name="_csrf" type="hidden" value="mqH8Okhah0ogMHP3EVv_JDcNw9ykgvS7lkI8eHMheKxrWyjjqpWfW30-5nMNCUKTJXbLFVI-7r7C45KWoXVZQUQUS5QOYxvS">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      </form>
+</div>
+
+<div class="login-box">
+		<div class="login-logo">
+			<b>BOXERCROSSGYM</b>
+		</div>
+
+		<div class="card">
+			<div class="card-body login-card-body">
+				<p class="login-box-msg">Inicio de Sesiï¿½n</p>
+				<form method="post" th:action="@{/login}">
+					<div class="input-group mb-3">
+						<input type="text" class="form-control" placeholder="Email"
+							name="username" id="username" autofocus>
+						<div class="input-group-append">
+							<div class="input-group-text">
+								<span class="fas fa-envelope"></span>
+							</div>
+						</div>
+					</div>
+					<div class="input-group mb-3">
+						<input type="password" name="password" id="password"
+							class="form-control" placeholder="Password">
+						<div class="input-group-append">
+							<div class="input-group-text">
+								<span class="fas fa-lock"></span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-8">
+							<div class="icheck-primary">
+								<input type="checkbox" id="remember"> <label
+									for="remember"> Remember Me </label>
+							</div>
+						</div>
+
+						<div class="col-4">
+							<button type="submit" class="btn btn-primary btn-block">Sign
+								In</button>
+						</div>
+
+						<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"> 
+
+					</div>
+				</form>
+
+
+
+			</div>
+
+		</div>
+	</div>
+
+
+
+
+
+
+
+ -->
+</body>
+</html>

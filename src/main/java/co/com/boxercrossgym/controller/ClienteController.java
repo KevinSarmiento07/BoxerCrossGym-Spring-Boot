@@ -57,7 +57,7 @@ public class ClienteController {
 			List<Cliente> clientes = clienteService.findAll(termino);
 			model.addAttribute("clientes", clientes);
 			model.addAttribute("titulo", "Listado De Clientes");
-			return "admin/listar";
+			return "admin/listarAdmin";
 		}
 		Sort sort = Sort.by(Sort.Direction.ASC, "nombre");
 		Pageable pageRequest = PageRequest.of(page, 15, sort);
@@ -67,7 +67,7 @@ public class ClienteController {
 		model.addAttribute("clientes", clientes);
 		model.addAttribute("titulo", "Listado De Clientes");
 		model.addAttribute("page", pageRender);
-		return "admin/listar";
+		return "admin/listarAdmin";
 	}
 
 	@GetMapping("/agregar")

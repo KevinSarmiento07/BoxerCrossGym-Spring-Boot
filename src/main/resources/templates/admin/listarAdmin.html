@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/plantillaAdmin.html :: head}"></head>
+<body class="hold-transition sidebar-mini layout-navbar-fixed">
+
+	<div class="wrapper">
+
+		<section th:replace="~{layout/plantillaAdmin.html :: header}"></section>
+
+
+
+		<div class="content-wrapper">
+
+			<section class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<!--  -->
+						<section th:replace="~{layout/plantillaAdmin.html :: alertas}"></section>
+					</div>
+				</div>
+				<!-- /.container-fluid -->
+			</section>
+
+			<section class="content mt-1">
+
+
+				<div class="container mb-3">
+					<div class="card mt-3">
+						<h1 class="card-header text-center my-4 fs-1">
+							<span th:text="${titulo}"></span> <i class="fa-solid fa-users"></i>
+						</h1>
+
+						<div class="card-body">
+							<a type="button" class="btn bg-black text-white mt-2 col-2"
+								th:href="@{/agregar}">Agregar Cliente <i
+								class="fa-regular fa-user"></i>
+							</a>
+
+							<form class="mt-4" th:action="@{/listar}">
+								<div class="row g-3 align-items-center">
+									<div class="col-auto">
+										<label for="termino" class="col-form-label">Filtrar:</label>
+									</div>
+									<div class="col-auto">
+										<input type="text" id="termino" name="termino"
+											class="form-control" th:value="${termino}">
+									</div>
+									<div class="col-auto">
+										<button type="submit" class="btn bg-dark text-white">Buscar</button>
+									</div>
+								</div>
+							</form>
+
+							<table class="table table-sm table-striped table-bordered  my-4">
+								<thead class="table-dark text-center">
+									<tr>
+										<th>Nombre</th>
+										<th>Fecha de Vencimiento Pago</th>
+										<th>Estado</th>
+										<th>Editar</th>
+										<th>Eliminar</th>
+										<th>Nuevo Pago</th>
+									</tr>
+								</thead>
+								<tbody class="table-group-divider text-center">
+									<tr th:each="cliente : ${clientes}">
+
+										<td><a th:href="@{/info/{id}(id = ${cliente.id})}"
+											th:text="${cliente.nombre} + ' ' +  ${cliente.apellido}"
+											class="btn btn-light btn-sm"></a></td>
+										<td
+											th:text="${cliente.ultimoPago() != null} ? ${cliente.ultimoPago().fechaVencimiento} : 'NO CONTIENE PAGOS REGISTRADOS'"></td>
+										<td
+											th:class="${cliente.getEstado() == 'ACTIVO'} ? 'bg-success' : 'bg-danger'"></td>
+										<td><a th:href="@{/editar/{id}(id = ${cliente.id})}"
+											class="btn btn-warning"> <i class="fa-solid fa-user-pen"></i></a>
+										</td>
+										<td><a th:href="@{/eliminar/{id}(id = ${cliente.id})}"
+											class="btn btn-light"
+											onclick="return confirm('¿Está seguro que desea eliminar el registro?');">
+												<i class="fa-solid fa-trash"></i>
+										</a></td>
+										<td><a
+											th:href="@{/pago/agregar/{id}(id = ${cliente.id})}"
+											class="btn bg-black text-white"> <i
+												class="fa-solid fa-file-invoice-dollar"></i>
+										</a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+				</div>
+				
+				<nav th:replace="~{layout/paginator-nav.html :: paginator}"></nav>
+
+			</section>
+		</div>
+
+		<section th:replace="~{layout/plantillaAdmin.html :: footer}"></section>
+
+	</div>
+
+
+
+
+
+	<script th:inline="javascript">
+	$(function () {
+		var successMessage = /*[[${success}]]*/null;
+		var Toast = Swal.mixin({
+			  position: 'top-end',
+			  icon: 'success',
+			  title: 'Inicio de Sesión Éxitoso',
+			  showConfirmButton: false,
+			  timer: 3000
+			})
+        function mostrarAlert() {
+			Toast.fire({
+				icon : "success",
+				title : "Inicio de Sesión Exitoso"
+			});
+		}
+        if (successMessage !== null) {
+			console.log("LA VARIABLE NO ES NULA " + successMessage);
+			mostrarAlert();
+		}
+      });
+	</script>	
+</body>
+</html>
