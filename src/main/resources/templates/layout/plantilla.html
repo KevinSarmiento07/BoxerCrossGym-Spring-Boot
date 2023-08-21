@@ -77,6 +77,15 @@
 			th:if="${error != null}" th:text="${error}"></div>
 	</header>
 	
+	<section th:fragment="section-header">
+		<header>
+			<div class="alert alert-danger text-center fs-1 fw-bold fst-italic"
+				th:if="${error != null}" th:text="${error}"></div>
+			<div class="alert alert-success text-center fs-1 fw-bold fst-italic"
+				th:if="${success != null}" th:text="${success}"></div>
+		</header>
+	</section>
+	
 	
 	
 	

@@ -14,9 +14,9 @@ public class MvcConfig implements WebMvcConfigurer{
 	
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	
-	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addViewController("/error_403").setViewName("error/error_403");
-	}
+//	public void addViewControllers(ViewControllerRegistry registry) {
+//		registry.addViewController("/error_403").setViewName("error/error_403");
+//	}
 	
 	@Bean
 	public static BCryptPasswordEncoder passwordEncoder() {

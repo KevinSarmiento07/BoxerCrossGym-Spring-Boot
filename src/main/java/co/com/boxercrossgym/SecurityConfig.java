@@ -13,16 +13,19 @@ import org.springframework.security.web.authentication.logout.HeaderWriterLogout
 import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
 import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter.Directive;
 
+import co.com.boxercrossgym.auth.handler.LoginSuccessHandler;
+import co.com.boxercrossgym.service.JpaUserDetailsService;
+
 
 @Configuration
 @EnableMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig{
 
 	
-//	@Autowired
-//	private LoginSuccessHandler successHandler;
-//	@Autowired
-//	private JpaUserDetailsService userDetailsService;
+	@Autowired
+	private LoginSuccessHandler successHandler;
+	@Autowired
+	private JpaUserDetailsService userDetailsService;
 	
 	
 	@Autowired
@@ -33,12 +36,13 @@ public class SecurityConfig{
 		System.out.println("ENTRO EN FILERCHAIN");
 		http.authorizeHttpRequests((authz) -> {
 			try {
-				authz.requestMatchers("/css/**", "/js/**", "/images/**", "/adminlte/**", "/fontawesome/**", "/registrar/**").permitAll()
+				authz.requestMatchers("/css/**", "/js/**", "/images/**", "/adminlte/**", "/fontawesome/**", "/agregar/**").permitAll()
 				/*.requestMatchers("/listar/**", "/").hasRole("USER")*/
 				.requestMatchers("/uploads/**").hasRole("USER")
-				.requestMatchers("/upload/**").hasRole("USER")
-				.requestMatchers("/delete/**").hasRole("ADMIN")
-				.requestMatchers("/form/**").hasRole("ADMIN")
+				.requestMatchers("/eliminar/**").hasRole("ADMIN")
+				.requestMatchers("/agregar/**").hasRole("ADMIN")
+				.requestMatchers("/editar/**").hasRole("ADMIN")
+				.requestMatchers("/info/**").hasRole("ADMIN")
 				.requestMatchers("/ver/**").hasRole("ADMIN")
 				.requestMatchers("/prueba/**").hasRole("ADMIN")
 				.anyRequest().authenticated();
@@ -46,7 +50,7 @@ public class SecurityConfig{
 				System.out.println("ENTRÓ EN EXCEPTION DE FILTERCHAIN");
 				e.printStackTrace();
 			}
-		}).formLogin(login -> login.loginPage("/login").permitAll())
+		}).formLogin(login -> login.loginPage("/login").successHandler(successHandler).permitAll())
 		.logout(logout -> logout.logoutSuccessUrl("/login?logout").permitAll().addLogoutHandler(new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(Directive.COOKIES))))
 		.exceptionHandling(((exceptionHandling) -> exceptionHandling.accessDeniedPage("/error_403")));
 			return http.build();
@@ -55,7 +59,7 @@ public class SecurityConfig{
 	 @Autowired
 	    public void configureGlobal(AuthenticationManagerBuilder build) throws Exception {
 	 
-//	        build.userDetailsService(userDetailsService)
-//	        .passwordEncoder(passwordEncoder);
+	        build.userDetailsService(userDetailsService)
+	        .passwordEncoder(passwordEncoder);
 	    }
 	}

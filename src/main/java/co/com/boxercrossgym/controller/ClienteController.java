@@ -2,9 +2,12 @@ package co.com.boxercrossgym.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -13,6 +16,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,11 +42,18 @@ import co.com.boxercrossgym.dao.IClienteDao;
 import co.com.boxercrossgym.entity.Cliente;
 import co.com.boxercrossgym.paginator.PageRender;
 import co.com.boxercrossgym.service.IClienteService;
+import co.com.boxercrossgym.service.JpaUserDetailsService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @SessionAttributes("cliente")
 @Controller
 public class ClienteController {
+
+	@Autowired
+	JpaUserDetailsService userDetailsService;
+
+	protected final Log logger = LogFactory.getLog(this.getClass());
 
 	@Autowired
 	@Qualifier(value = "clienteServiceImple")
@@ -48,10 +66,25 @@ public class ClienteController {
 		binder.registerCustomEditor(Date.class, "fechaInscripcion", new CustomDateEditor(dateFormat, false));
 	}
 
+	@Secured(value = "ROLE_USER")
 	@GetMapping(path = { "/", "/listar" })
 	public String listar(@RequestParam(defaultValue = "0", name = "page") int page, Model model,
-			@Param("termino") String termino) {
+			@Param("termino") String termino, HttpServletRequest request) {
 		System.out.println("TERMINO: " + termino);
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		Cliente cliente = userDetailsService.findByUsername(auth.getName());
+		SecurityContextHolderAwareRequestWrapper securityContext = new SecurityContextHolderAwareRequestWrapper(request,
+				"ROLE_");
+
+		if (securityContext.isUserInRole("ADMIN")) {
+			logger.info("Hola ".concat(auth.getName())
+					.concat(" tienes acceso desde SecurityContextHolderAwareRequestWrapper"));
+		} else {
+			logger.info("Hola ".concat(auth.getName())
+					.concat(" no tienes acceso desde SecurityContextHolderAwareRequestWrapper"));
+		}
 
 		if (termino != null) {
 			List<Cliente> clientes = clienteService.findAll(termino);
@@ -64,6 +97,7 @@ public class ClienteController {
 		Page<Cliente> clientes = clienteService.findAll(pageRequest);
 		PageRender<Cliente> pageRender = new PageRender<>("/listar", clientes);
 
+		model.addAttribute("nombre", cliente.getNombre() + " " + cliente.getApellido());
 		model.addAttribute("clientes", clientes);
 		model.addAttribute("titulo", "Listado De Clientes");
 		model.addAttribute("page", pageRender);
@@ -93,7 +127,7 @@ public class ClienteController {
 		String mensaje = cliente.getId() != null ? "El usuario a sido editado exitosamente"
 				: "El usuario a sido creado exitosamente";
 
-		clienteService.save(cliente);
+		userDetailsService.save(cliente);
 		status.setComplete();
 		flash.addFlashAttribute("success", mensaje);
 		return "redirect:/listar";
@@ -155,8 +189,23 @@ public class ClienteController {
 		model.addAttribute("cliente", cliente);
 		return "admin/infoCliente";
 	}
-	
-	
-	
+
+	public boolean hasRole(String role) {
+		SecurityContext context = SecurityContextHolder.getContext();
+
+		if (context == null) {
+			return false;
+		}
+
+		Authentication auth = context.getAuthentication();
+
+		if (auth == null) {
+			return false;
+		}
+
+		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
+
+		return authorities.contains(new SimpleGrantedAuthority(role));
+	}
 
 }

@@ -5,17 +5,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.hibernate.annotations.GeneratorType;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -65,8 +66,19 @@ public class Cliente implements Serializable{
 	@NotEmpty
 	@Size(max = 10, message = "El telefono solo puede tener un maximo de 10 digitos")
 	private String telefono;
+	
 	@NotEmpty
-	private String email;
+	@Column(length = 100,unique = true)
+	private String username;
+	
+	@Column(length = 60)
+	private String password;
+	
+	private boolean enabled;
+	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "cliente_id")
+	private List<Role> roles;
 	
 	private String antecedente;
 	
@@ -82,8 +94,13 @@ public class Cliente implements Serializable{
 		pagos.add(pago);
 	}
 	
+	public void addRole(Role role) {
+		roles.add(role);
+	}
+	
 	public Cliente() {
 		this.pagos = new ArrayList<>();
+		this.roles = new ArrayList<Role>();
 	}
 	
 	public Pago ultimoPago() {
@@ -113,7 +130,7 @@ public class Cliente implements Serializable{
 	public String toString() {
 		return "Cliente [id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", fechaNacimiento="
 				+ fechaNacimiento + ", fechaInscripcion=" + fechaInscripcion + ", sexo=" + sexo + ", telefono="
-				+ telefono + ", email=" + email + ", antecedente=" + antecedente + ", cedula=" + cedula + "]";
+				+ telefono + ", email=" + username + ", antecedente=" + antecedente + ", cedula=" + cedula + "]";
 	}
 	
 	

@@ -13,7 +13,8 @@
 	
 		<div class="card-header">Error: Acceso Denegado</div>
 		<div class="card-body">
-			<h5 class="card-tittle">Lo sentimos <span th:text="${#authentication.name}"></span>, no tienes permisos para accedes a este recurso.</h5>
+		<!-- th:text="${#authentication.name}" -->
+			<h5 class="card-tittle">Lo sentimos <span th:text="${cliente.nombre}"></span>, no tienes permisos para accedes a este recurso.</h5>
 			
 			<a th:href="@{/listar}" class="btn bg-black text-white"> <i class="fa-solid fa-left-long" role="button"></i> Volver</a>
 		</div>

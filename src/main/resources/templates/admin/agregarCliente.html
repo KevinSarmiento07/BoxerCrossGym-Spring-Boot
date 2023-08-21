@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace ="~{layout/plantilla.html :: head}">
 </head>
 <body>
@@ -9,9 +9,9 @@
 <div class="container">
 
 	
-	<h1 th:text="${titulo}" class="text-center my-4 fw-bold"></h1>
+	<h1 th:text="${titulo}"  class="text-center my-4 fw-bold"></h1>
 	
-	<a th:href="@{/listar}" class="btn bg-black text-white"> <i class="fa-solid fa-left-long"></i> Volver</a>
+	<a th:href="@{/listar}" sec:authorize="hasRole('ROLE_ADMIN')" class="btn bg-black text-white"> <i class="fa-solid fa-left-long"></i> Volver</a>
 	
 	
 	<form class="row g-3 my-4" method="post" th:action="@{/agregar}" th:object="${cliente}">
@@ -28,10 +28,15 @@
               
               <div th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}" class="invalid-feedback fw-bold"></div>
             </div>
-            <div class="col-sm-12">
+            <div class="col-sm-6">
               <label for="email" class="form-label fw-bold">Email</label>
-              <input type="email" class="form-control border-black" id="email" placeholder="bxr@gmail.com" th:field="*{email}" th:errorclass="'form-control is-invalid'">
-              <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="invalid-feedback fw-bold"></div>
+              <input type="email"  name="passwrd" class="form-control border-black" id="email" placeholder="bxr@gmail.com" th:field="*{username}" th:errorclass="'form-control is-invalid'">
+              <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="invalid-feedback fw-bold"></div>
+            </div>
+            <div class="col-sm-6">
+              <label for="password" class="form-label fw-bold">Contraseña</label>
+              <input type="password" name="password" class="form-control border-black" id="password"  th:field="*{password}" th:errorclass="'form-control is-invalid'">
+              <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="invalid-feedback fw-bold"></div>
             </div>
             
             <div class="col-sm-6">

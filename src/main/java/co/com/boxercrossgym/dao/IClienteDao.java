@@ -16,5 +16,8 @@ public interface IClienteDao extends JpaRepository<Cliente, Integer>{
 	
 	@Query("select c from Cliente c where c.nombre LIKE %?1%")
 	public List<Cliente> findByNombre(String term);
+	
+	
+	public Cliente findByUsername(String username);
 
 }
