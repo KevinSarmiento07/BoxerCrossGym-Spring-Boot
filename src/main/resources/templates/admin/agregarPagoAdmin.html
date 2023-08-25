@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/plantillaAdmin.html :: head}"></head>
+<body class="hold-transition sidebar-mini layout-navbar-fixed">
+
+	<div class="wrapper">
+
+		<section th:replace="~{layout/plantillaAdmin.html :: header}"></section>
+
+
+
+		<div class="content-wrapper">
+
+			<section class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<!--  -->
+
+					</div>
+				</div>
+				<!-- /.container-fluid -->
+			</section>
+
+			<section class="content mt-1">
+
+				<div class="container mt-3">
+
+					<h1 th:text="${titulo}" class="text-center my-4 fw-bold bg-black p-2"></h1>
+					<a th:href="@{/pago/listar}" class="btn bg-black text-white my-3">
+						<i class="fa-solid fa-left-long"></i> Volver
+					</a>
+
+
+
+					<form th:object="${pago}" th:action="@{/pago/agregar}"
+						method="post">
+						<!-- Otros campos de pago (tipo de plan, valor, fecha, vencimiento) -->
+
+						<div class="row mb-3 "
+							th:if="${pago.cliente == null and cliente == null}">
+							<div class="col-sm-1">
+								<label class="col-form-label col-3 fw-bold" for="buscar_persona"
+									th:text="'Cliente:'"></label>
+							</div>
+							<div class="col-6">
+								<input name="buscar_persona" class="form-control col-sm-6"
+									type="text" id="buscar_persona" placeholder="Buscar..."
+									required> <input type="hidden" id="cliente_id"
+									name="cliente" th:field="*{cliente}">
+
+
+
+							</div>
+						</div>
+
+
+						<div class="row mb-3 " th:if="${cliente != null}">
+
+							<div class="col-8">
+								<label class="form-label fw-bold" for="cliente">Cliente:</label>
+								<input class="form-control" type="text" id="cliente"
+									th:value="${cliente.nombre} + ' ' + ${cliente.apellido}"
+									readonly /> <input type="hidden" name="cliente"
+									th:value="${cliente.id}">
+							</div>
+
+
+						</div>
+
+						<div class="row mb-3 " th:if="${pago.cliente != null}">
+
+							<div class="col-8">
+								<label class="form-label fw-bold" for="cliente">Cliente:</label>
+								<input class="form-control" type="text" id="cliente"
+									th:value="${pago.cliente.nombre} + ' ' + ${pago.cliente.apellido}"
+									readonly /> <input type="hidden" name="cliente"
+									th:value="${pago.cliente.id}">
+							</div>
+
+
+						</div>
+
+
+
+
+
+						<div class="mb-3 col-sm-7">
+							<label class="form-label fw-bold" for="fechaPago">Fecha
+								de Pago:</label> <input type="date" class="form-control" id="fechaPago"
+								placeholder="yyyy-MM-dd" th:field="*{fechaPago}"
+								th:errorclass="'form-control is-invalid'">
+
+							<div th:if="${#fields.hasErrors('fechaPago')}"
+								th:errors="*{fechaPago}" class="invalid-feedback fw-bold"></div>
+						</div>
+
+
+						<div class="mb-3 col-sm-7"
+							th:if="${pago.fechaVencimiento != null}">
+							<label class="form-label fw-bold" for="fechaVencimiento">Fecha
+								de Vencimiento:</label> <input type="date" class="form-control"
+								id="fechaVencimiento" placeholder="yyyy-MM-dd"
+								th:field="*{fechaVencimiento}"
+								th:errorclass="'form-control is-invalid'">
+
+							<div th:if="${#fields.hasErrors('fechaVencimiento')}"
+								th:errors="*{fechaVencimiento}" class="invalid-feedback fw-bold"></div>
+						</div>
+
+						<div class="mb-3 col-sm-7">
+							<label class="form-label fw-bold" for="selectPlan">Plan:</label>
+							<select class="form-select" th:field="*{plan}" id="selectPlan"
+								name="plan" th:errorclass="'form-select is-invalid'">
+								<option value='' selected>Seleccionar Tipo de Plan</option>
+								<option th:each="plan : ${planes}" th:value="${plan.id}"
+									th:text="${plan.nombre}" th:data-valor="${plan.valor}"></option>
+
+							</select>
+
+							<div th:if="${#fields.hasErrors('plan')}" th:errors="*{plan}"
+								class="invalid-feedback fw-bold"></div>
+
+						</div>
+
+
+						<div class="mb-3 col-sm-7">
+							<label for="valorPlanInput" class="form-label fw-bold">Valor
+								a cancelar:</label> <input type="text" class="form-control"
+								id="valorPlanInput" th:field="*{valorPagado}"
+								th:errorclass="'form-control is-invalid'">
+							<div th:if="${#fields.hasErrors('valorPagado')}"
+								th:errors="*{valorPagado}" class="invalid-feedback fw-bold"></div>
+						</div>
+
+
+						<div class="mb-3 col-sm-7">
+							<label class="form-label fw-bold" for="tipoPago">Tipo de
+								Pago:</label> <select class="form-select" th:field="*{tipoPago}"
+								id="tipoPago" th:errorclass="'form-select is-invalid'">
+								<option value='' selected>Seleccionar Tipo de Pago</option>
+								<option th:each="tipo : ${tipoPagos}" th:value="${tipo.id}"
+									th:text="${tipo.descripcion}"></option>
+
+							</select>
+
+							<div th:if="${#fields.hasErrors('tipoPago')}"
+								th:errors="*{tipoPago}" class="invalid-feedback fw-bold"></div>
+
+						</div>
+
+
+
+
+
+
+						<button class="btn bg-black text-white my-3" type="submit"
+							th:text="${titulo}">Agregar Pago</button>
+
+					</form>
+
+				</div>
+
+			</section>
+		</div>
+
+		<footer th:replace="~{layout/plantillaAdmin.html :: footer}"></footer>
+		<section th:replace="~{layout/plantillaAdmin.html :: scripts}"></section>
+
+	</div>
+
+</body>
+</html>

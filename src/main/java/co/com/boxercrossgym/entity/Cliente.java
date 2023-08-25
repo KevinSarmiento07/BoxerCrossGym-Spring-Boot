@@ -18,6 +18,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -76,7 +77,7 @@ public class Cliente implements Serializable{
 	
 	private boolean enabled;
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "cliente_id")
 	private List<Role> roles;
 	
@@ -86,7 +87,7 @@ public class Cliente implements Serializable{
 	private String cedula;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "cliente", fetch = FetchType.EAGER)
 	private List<Pago> pagos;
 	
 	
@@ -111,7 +112,7 @@ public class Cliente implements Serializable{
 	}
 	
 	@JsonIgnore
-	public String getEstado() {
+	public boolean getEstado() {
 		
 		Pago pago = ultimoPago();
 		
@@ -119,11 +120,11 @@ public class Cliente implements Serializable{
 			Date fechaVencimento = pago.getFechaVencimiento();
 			Date fecha = new Date();
 			if(fecha.before(fechaVencimento)) {
-				return "ACTIVO";
+				return true;
 			}
 		}
 		
-		return "INACTIVO";
+		return false;
 	}
 
 	@Override
@@ -132,6 +133,7 @@ public class Cliente implements Serializable{
 				+ fechaNacimiento + ", fechaInscripcion=" + fechaInscripcion + ", sexo=" + sexo + ", telefono="
 				+ telefono + ", email=" + username + ", antecedente=" + antecedente + ", cedula=" + cedula + "]";
 	}
+	
 	
 	
 	

@@ -30,6 +30,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,12 +59,26 @@ public class ClienteController {
 	@Autowired
 	@Qualifier(value = "clienteServiceImple")
 	IClienteService clienteService;
+	
+	
+	@ModelAttribute("nombre")
+	public String nombre() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		return userDetailsService.findByUsername(auth.getName()).getNombre() + " " + userDetailsService.findByUsername(auth.getName()).getApellido();
+	}
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		binder.registerCustomEditor(Date.class, "fechaNacimiento", new CustomDateEditor(dateFormat, false));
 		binder.registerCustomEditor(Date.class, "fechaInscripcion", new CustomDateEditor(dateFormat, false));
+	}
+	
+	
+	public String clienteLogueado() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		
+		return userDetailsService.findByUsername(auth.getName()).getNombre() + " " + userDetailsService.findByUsername(auth.getName()).getApellido();
 	}
 
 	@Secured(value = "ROLE_USER")
@@ -97,7 +112,6 @@ public class ClienteController {
 		Page<Cliente> clientes = clienteService.findAll(pageRequest);
 		PageRender<Cliente> pageRender = new PageRender<>("/listar", clientes);
 
-		model.addAttribute("nombre", cliente.getNombre() + " " + cliente.getApellido());
 		model.addAttribute("clientes", clientes);
 		model.addAttribute("titulo", "Listado De Clientes");
 		model.addAttribute("page", pageRender);
@@ -110,7 +124,7 @@ public class ClienteController {
 		model.addAttribute("titulo", "Agregar Cliente");
 		model.addAttribute("cliente", cliente);
 		System.out.println("clienteGetAgregr: " + cliente);
-		return "admin/agregarCliente";
+		return "admin/agregarClienteAdmin";
 	}
 
 	@PostMapping("/agregar")
@@ -121,7 +135,7 @@ public class ClienteController {
 
 		if (result.hasErrors()) {
 			model.addAttribute("titulo", "Agregar Cliente");
-			return "admin/agregarCliente";
+			return "admin/agregarClienteAdmin";
 		}
 
 		String mensaje = cliente.getId() != null ? "El usuario a sido editado exitosamente"
@@ -150,7 +164,7 @@ public class ClienteController {
 		}
 		model.addAttribute("titulo", "Editar Cliente");
 		model.addAttribute("cliente", cliente);
-		return "admin/agregarCliente";
+		return "admin/agregarClienteAdmin";
 	}
 
 	@GetMapping("/eliminar/{id}")
@@ -187,7 +201,7 @@ public class ClienteController {
 		}
 		model.addAttribute("titulo", "Información del Cliente");
 		model.addAttribute("cliente", cliente);
-		return "admin/infoCliente";
+		return "admin/infoClienteAdmin";
 	}
 
 	public boolean hasRole(String role) {

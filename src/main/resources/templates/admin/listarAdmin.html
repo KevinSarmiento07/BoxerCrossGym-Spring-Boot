@@ -26,12 +26,12 @@
 
 				<div class="container mb-3">
 					<div class="card mt-3">
-						<h1 class="card-header text-center my-4 fs-1">
+						<h1 class="card-header text-center my-4 fs-1 bg-black">
 							<span th:text="${titulo}"></span> <i class="fa-solid fa-users"></i>
 						</h1>
 
 						<div class="card-body">
-							<a type="button" class="btn bg-black text-white mt-2 col-2"
+							<a type="button" class="btn bg-black text-white mt-2  btn-md"
 								th:href="@{/agregar}">Agregar Cliente <i
 								class="fa-regular fa-user"></i>
 							</a>
@@ -51,7 +51,7 @@
 								</div>
 							</form>
 
-							<table class="table table-sm table-striped table-bordered  my-4">
+							<table class="table table-sm table-striped table-bordered  my-4 table-responsive-sm">
 								<thead class="table-dark text-center">
 									<tr>
 										<th>Nombre</th>
@@ -71,7 +71,7 @@
 										<td
 											th:text="${cliente.ultimoPago() != null} ? ${cliente.ultimoPago().fechaVencimiento} : 'NO CONTIENE PAGOS REGISTRADOS'"></td>
 										<td
-											th:class="${cliente.getEstado() == 'ACTIVO'} ? 'bg-success' : 'bg-danger'"></td>
+											th:class="${cliente.getEstado() == true} ? 'bg-success' : 'bg-danger'"></td>
 										<td><a th:href="@{/editar/{id}(id = ${cliente.id})}"
 											class="btn btn-warning"> <i class="fa-solid fa-user-pen"></i></a>
 										</td>
@@ -98,7 +98,8 @@
 			</section>
 		</div>
 
-		<section th:replace="~{layout/plantillaAdmin.html :: footer}"></section>
+		<footer th:replace="~{layout/plantillaAdmin.html :: footer}"></footer>
+		<section th:replace="~{layout/plantillaAdmin.html :: scripts}"></section>
 
 	</div>
 
@@ -106,27 +107,6 @@
 
 
 
-	<script th:inline="javascript">
-	$(function () {
-		var successMessage = /*[[${success}]]*/null;
-		var Toast = Swal.mixin({
-			  position: 'top-end',
-			  icon: 'success',
-			  title: 'Inicio de Sesión Exitoso',
-			  showConfirmButton: false,
-			  timer: 3000
-			})
-        function mostrarAlert() {
-			Toast.fire({
-				icon : "success",
-				title : successMessage
-			});
-		}
-        if (successMessage !== null) {
-			console.log("LA VARIABLE NO ES NULA " + successMessage);
-			mostrarAlert();
-		}
-      });
-	</script>	
+		
 </body>
 </html>

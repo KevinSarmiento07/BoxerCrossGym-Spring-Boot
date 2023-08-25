@@ -45,6 +45,7 @@ public class SecurityConfig{
 				.requestMatchers("/info/**").hasRole("ADMIN")
 				.requestMatchers("/ver/**").hasRole("ADMIN")
 				.requestMatchers("/prueba/**").hasRole("ADMIN")
+				.requestMatchers("/entrenamiento/**").hasRole("ADMIN")
 				.anyRequest().authenticated();
 			}catch (Exception e) {
 				System.out.println("ENTRÓ EN EXCEPTION DE FILTERCHAIN");

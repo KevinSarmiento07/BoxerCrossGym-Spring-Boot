@@ -19,5 +19,7 @@ public interface IClienteDao extends JpaRepository<Cliente, Integer>{
 	
 	
 	public Cliente findByUsername(String username);
+	
+	
 
 }

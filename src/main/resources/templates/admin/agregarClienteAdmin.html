@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layout/plantillaAdmin.html :: head}"></head>
+<body class="hold-transition sidebar-mini layout-navbar-fixed">
+
+	<div class="wrapper">
+
+		<section th:if="${#authentication.isAuthenticated()}" th:replace="~{layout/plantillaAdmin.html :: header}"></section>
+
+
+
+		<div class="content-wrapper">
+
+			<section class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<!--  -->
+
+					</div>
+				</div>
+				<!-- /.container-fluid -->
+			</section>
+
+			<section class="content mt-1">
+
+				<div class="container">
+
+
+					<h1 th:text="${titulo}" class="text-center my-4 fw-bold bg-black p-2"></h1>
+
+					<a th:href="@{/listar}" sec:authorize="hasRole('ROLE_ADMIN')"
+						class="btn bg-black text-white"> <i
+						class="fa-solid fa-left-long"></i> Volver
+					</a>
+
+
+					<form class="row g-3 my-4" method="post" th:action="@{/agregar}"
+						th:object="${cliente}">
+						<div class="col-sm-6">
+							<label for="nombre" class="form-label fw-bold">Nombre</label> <input
+								type="text" class="form-control border-black" id="nombre"
+								th:field="*{nombre}" th:errorclass="'form-control is-invalid '">
+							<div th:if="${#fields.hasErrors('nombre')}"
+								class="invalid-feedback fw-bold" th:errors="*{nombre}"></div>
+
+
+						</div>
+						<div class="col-sm-6">
+							<label for="apellido" class="form-label fw-bold">Apellido</label>
+							<input type="text" class="form-control border-black"
+								id="apellido" th:field="*{apellido}"
+								th:errorclass="'form-control is-invalid'">
+
+							<div th:if="${#fields.hasErrors('apellido')}"
+								th:errors="*{apellido}" class="invalid-feedback fw-bold"></div>
+						</div>
+						<div class="col-sm-6">
+							<label for="email" class="form-label fw-bold">Email</label> <input
+								type="email" name="passwrd" class="form-control border-black"
+								id="email" placeholder="bxr@gmail.com" th:field="*{username}"
+								th:errorclass="'form-control is-invalid'">
+							<div th:if="${#fields.hasErrors('username')}"
+								th:errors="*{username}" class="invalid-feedback fw-bold"></div>
+						</div>
+						<div class="col-sm-6">
+							<label for="password" class="form-label fw-bold">Contraseña</label>
+							<input type="password" name="password"
+								class="form-control border-black" id="password"
+								th:field="*{password}" th:errorclass="'form-control is-invalid'">
+							<div th:if="${#fields.hasErrors('password')}"
+								th:errors="*{password}" class="invalid-feedback fw-bold"></div>
+						</div>
+
+						<div class="col-sm-6">
+							<label for="fechaNacimiento" class="form-label fw-bold">Fecha
+								de Nacimiento</label> <input type="date"
+								class="form-control border-black" id="fechaNacimiento"
+								th:field="*{fechaNacimiento}"
+								th:errorclass="'form-control is-invalid'">
+							<div th:if="${#fields.hasErrors('fechaNacimiento')}"
+								th:errors="*{fechaNacimiento}" class="invalid-feedback fw-bold"></div>
+						</div>
+						<div class="col-sm-6">
+							<label for="fechaInscripcion" class="form-label fw-bold">Fecha
+								de Inscripción</label> <input type="date"
+								class="form-control border-black" id="fechaInscripcion"
+								th:field="*{fechaInscripcion}"
+								th:errorclass="'form-control is-invalid'">
+							<div th:if="${#fields.hasErrors('fechaInscripcion')}"
+								th:errors="*{fechaInscripcion}" class="invalid-feedback fw-bold"></div>
+						</div>
+						<div class="col-sm-4">
+							<label for="sexo" class="form-label fw-bold">Sexo</label> <select
+								id="sexo" class="form-select border-black" th:field="*{sexo}"
+								th:errorclass="'form-select is-invalid'">
+								<option selected value="">Seleccionar...</option>
+								<option value="M">Masculino</option>
+								<option value="F">Femenino</option>
+							</select>
+							<div th:if="${#fields.hasErrors('sexo')}" th:errors="*{sexo}"
+								class="invalid-feedback fw-bold"></div>
+						</div>
+						<div class="col-sm-4">
+							<label for="telefono" class="form-label fw-bold">Télefono</label>
+							<input type="text" class="form-control border-black"
+								id="telefono" th:field="*{telefono}"
+								th:errorclass="'form-control is-invalid'">
+							<div th:if="${#fields.hasErrors('telefono')}"
+								th:errors="*{telefono}" class="invalid-feedback fw-bold"></div>
+						</div>
+						<div class="col-sm-4">
+							<label for="cedula" class="form-label fw-bold">Documento
+								de Identidad</label> <input type="text"
+								class="form-control border-black" id="cedula"
+								th:field="*{cedula}" th:errorclass="'form-control is-invalid'">
+							<div th:if="${#fields.hasErrors('cedula')}" th:errors="*{cedula}"
+								class="invalid-feedback fw-bold"></div>
+						</div>
+
+						<div class="col-sm-12">
+							<label for="antecedente" class="form-label fw-bold">Información
+								Adicional</label>
+							<textarea class="form-control border-black" id="antecedente"
+								rows="3" th:field="*{antecedente}"></textarea>
+						</div>
+
+
+						<div class="col-12">
+							<button type="submit" class="btn btn-secondary">
+								Guardar <i class="fa-regular fa-floppy-disk"></i>
+							</button>
+						</div>
+					</form>
+
+
+				</div>
+			</section>
+		</div>
+
+		<footer th:replace="~{layout/plantillaAdmin.html :: footer}"></footer>
+		<section th:replace="~{layout/plantillaAdmin.html :: scripts}"></section>
+
+	</div>
+
+</body>
+</html>

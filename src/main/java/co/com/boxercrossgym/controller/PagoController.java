@@ -8,10 +8,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +28,7 @@ import co.com.boxercrossgym.entity.Cliente;
 import co.com.boxercrossgym.entity.Pago;
 import co.com.boxercrossgym.paginator.PageRender;
 import co.com.boxercrossgym.service.IClienteService;
+import co.com.boxercrossgym.service.JpaUserDetailsService;
 import jakarta.validation.Valid;
 
 @Controller
@@ -35,6 +39,17 @@ public class PagoController {
 	
 	@Autowired
 	IClienteService clienteService;
+	
+	@Autowired
+	JpaUserDetailsService userDetailsService;
+	
+	@ModelAttribute("nombre")
+	public String nombre() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		return userDetailsService.findByUsername(auth.getName()).getNombre() + " " + userDetailsService.findByUsername(auth.getName()).getApellido();
+	}
+	
+	
 	
 	@GetMapping("/listar")
 	public String listarPagos(@RequestParam(defaultValue = "0", name = "page") int page ,Model model, @Param("termino") String termino) {
@@ -62,7 +77,7 @@ public class PagoController {
 		model.addAttribute("titulo", "Listado de Pagos");
 		model.addAttribute("pagos", pagos);
 		model.addAttribute("page", pageRender);
-		return "admin/listarPagos";
+		return "admin/listarPagosAdmin";
 	}
 	
 	@GetMapping(path =  {"/agregar", "/agregar/{id}"})
@@ -82,13 +97,14 @@ public class PagoController {
 		model.addAttribute("clientes", clienteService.findAll());
 		model.addAttribute("tipoPagos", clienteService.findAllTipoPago());
 		model.addAttribute("planes", clienteService.findAllPlanes());
-		return "admin/agregarPago";
+		return "admin/agregarPagoAdmin";
 	}
 	
 	@PostMapping("/agregar")
-	public String procesarGuardarPago(@Valid Pago pago,BindingResult result, @RequestParam(name = "buscar_persona", required = false) String buscarPersona, @RequestParam(name = "clienteId", required = false) Integer clienteId, Model model,
+	public String procesarGuardarPago(@Valid Pago pago,BindingResult result, @RequestParam(name = "buscar_persona", required = false) String buscarPersona, @RequestParam(name = "cliente", required = false) Integer clienteId, Model model,
 			SessionStatus status, RedirectAttributes flash) {
-		
+		System.out.println(buscarPersona);
+		System.out.println(clienteId);
 		System.out.println("EL CLIENTE " + pago.getCliente());
 		
 		if(result.hasErrors()) {
@@ -113,8 +129,7 @@ public class PagoController {
 			return "admin/agregarPago";
 		}
 		pago.setCliente(cliente);
-		
-		
+		cliente.setEnabled(true);
 		String mensajeFlash = pago.getId() == null? "El pago a sido creado con exito" : "El pago a sido editado con exito";
 		clienteService.savePago(pago);
 		flash.addFlashAttribute("success", mensajeFlash);
@@ -126,7 +141,6 @@ public class PagoController {
 	
 	@GetMapping("/editar/{id}")
 	public String editarPago(@PathVariable("id") Integer id, Model model, RedirectAttributes flash) {
-		
 		Pago pago = null;
 		
 		if(id > 0) {

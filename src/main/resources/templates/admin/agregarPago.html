@@ -27,7 +27,7 @@
 				<div class="col-6">
 					<input name="buscar_persona" class="form-control col-sm-6"
 						type="text" id="buscar_persona" placeholder="Buscar..." required>
-					<input type="hidden" id="cliente_id" name="clienteId" th:field="*{cliente}">
+					<input type="hidden" id="cliente_id" name="cliente" th:field="*{cliente}">
 
 
 
@@ -41,7 +41,7 @@
 					<label class="form-label fw-bold" for="cliente">Cliente:</label> <input
 						class="form-control" type="text" id="cliente"
 						th:value="${cliente.nombre} + ' ' + ${cliente.apellido}" readonly />
-					<input type="hidden" name="clienteId" th:value="${cliente.id}">
+					<input type="hidden" name="cliente" th:value="${cliente.id}">
 				</div>
 
 
@@ -53,7 +53,7 @@
 					<label class="form-label fw-bold" for="cliente">Cliente:</label> <input
 						class="form-control" type="text" id="cliente"
 						th:value="${pago.cliente.nombre} + ' ' + ${pago.cliente.apellido}"
-						readonly /> <input type="hidden" name="clienteId"
+						readonly /> <input type="hidden" name="cliente"
 						th:value="${pago.cliente.id}">
 				</div>
 

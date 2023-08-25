@@ -39,7 +39,7 @@ public class LoginController {
 		
 		if(error != null) {
 			System.out.println("entró en el if de ERROR");
-			model.addAttribute("error", "Error al iniciar sesión, usuario o contraseña incorrecta");
+			model.addAttribute("errorLogin", "Error al iniciar sesión, usuario o contraseña incorrecta");
 			
 		}
 		
