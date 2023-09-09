@@ -1,36 +1,53 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="~{layout/plantillaAdmin.html :: head}"></head>
-<body class="hold-transition sidebar-mini layout-navbar-fixed">
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+  <head th:replace="~{layout/plantillaAdmin.html :: head}"></head>
+  <body class="hold-transition sidebar-mini layout-navbar-fixed">
+    <div class="wrapper">
+      <section th:replace="~{layout/plantillaAdmin.html :: header}"></section>
 
-	<div class="wrapper">
+      <div class="content-wrapper">
+        <section class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2">
+              <h1 th:text="${titulo}" class="text-center fw-bold fs-1"></h1>
+            </div>
+          </div>
+          <!-- /.container-fluid -->
+        </section>
 
-		<section th:replace="~{layout/plantillaAdmin.html :: header}"></section>
+        <section class="content mt-1">
+          <form method="post" th:action="@{/entrenamiento/agregar}" th:object="${entrenamiento}">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="text-center">
+                  <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInput" placeholder="titulo" th:field="*{titulo}"/>
+                    <label for="floatingInput">Titulo</label>
+                  </div>
+				  <div class="form-floating mb-3">
+                    <input type="date" class="form-control" id="floatingInput" placeholder="Fecha" th:field="*{fechaEntreno}"/>
+                    <label for="floatingInput">Fecha</label>
+                  </div>
+                </div>
+              </div>
 
 
-
-		<div class="content-wrapper">
-
-			<section class="content-header">
-				<div class="container-fluid">
-					<div class="row mb-2">
-						<!--  -->
-						
-					</div>
-				</div>
-				<!-- /.container-fluid -->
-			</section>
-
-			<section class="content mt-1">
+              <div class="col-sm-6">
+				<button class="btn btn-primary" type="submit">Crear</button>
+			  </div>
 
 
-			</section>
-		</div>
+			  
+            </div>
+          </form>
+        </section>
+      </div>
 
-		<footer th:replace="~{layout/plantillaAdmin.html :: footer}"></footer>
-		<section th:replace="~{layout/plantillaAdmin.html :: scripts}"></section>
-
-	</div>
-
-</body>
+      <footer th:replace="~{layout/plantillaAdmin.html :: footer}"></footer>
+      <section th:replace="~{layout/plantillaAdmin.html :: scripts}"></section>
+    </div>
+  </body>
 </html>

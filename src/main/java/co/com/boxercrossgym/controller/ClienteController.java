@@ -50,7 +50,8 @@ import jakarta.validation.Valid;
 @SessionAttributes("cliente")
 @Controller
 public class ClienteController {
-
+	
+	
 	@Autowired
 	JpaUserDetailsService userDetailsService;
 
@@ -64,7 +65,14 @@ public class ClienteController {
 	@ModelAttribute("nombre")
 	public String nombre() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		return userDetailsService.findByUsername(auth.getName()).getNombre() + " " + userDetailsService.findByUsername(auth.getName()).getApellido();
+		String nombre = "";
+		try{
+			nombre = userDetailsService.findByUsername(auth.getName()).getNombre() + " " + userDetailsService.findByUsername(auth.getName()).getApellido();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return nombre != null ?  nombre : "";
+		
 	}
 
 	@InitBinder
@@ -90,6 +98,7 @@ public class ClienteController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 		Cliente cliente = userDetailsService.findByUsername(auth.getName());
+		
 		SecurityContextHolderAwareRequestWrapper securityContext = new SecurityContextHolderAwareRequestWrapper(request,
 				"ROLE_");
 
