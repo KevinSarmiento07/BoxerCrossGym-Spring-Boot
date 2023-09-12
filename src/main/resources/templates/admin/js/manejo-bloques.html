@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<script type="text/javascript" th:fragment="manejo-bloques">
+
+
+	
+
+	$.fn.autoResize = function () {
+	let e = (e) => {
+		(e.style.height = ""), (e.style.height = e.scrollHeight + "px");
+	};
+	return this.each((t, i) => {
+		(i.style.overflow = "hidden"),
+		e(i),
+		$(i).bind("input", (t) => {
+			e(t.target);
+		});
+	});
+	};
+
+	<!--y luego lo declaras-->
+	
+
+	var descripciones = [];
+	function agregarComentario(){
+		var linea = $('#plantillaBloque').html();
+		/* console.log("LINEA: " +  linea); */
+		var nombreBloque = $('#nombreBloque').val();
+		var descripcionBloque = $('#descripcionBloque').val();
+		linea = linea.replace(/{NOMBRE}/g, nombreBloque);
+		linea = linea.replace(/{DESCRIPCION}/g, descripcionBloque);
+
+
+
+		var contenedorNuevoCard = $("<div class='card-container'></div>");
+		contenedorNuevoCard.append(linea);
+
+		$('#bloques').append(contenedorNuevoCard);
+		contenedorNuevoCard.hide().fadeIn();
+		/* console.log(linea); */
+		/* $('#bloques').hide().append(linea); */
+
+		// Muestra el elemento #bloques con una animación de slideDown
+		/* $('#bloques').slideDown(); */
+		
+		$("textarea").autoResize();
+		descripciones.push(descripcionBloque);
+		/* console.log(descripciones); */	
+		console.log(nombreBloque + " , " + descripcionBloque);
+		
+	}
+	console.log("Hola desde JQuery");
+	$('#btnAgregar').on('click', function(){
+
+		var nombre = $('#nombreBloque').val();
+		var descripcion = $('#descripcionBloque').val();
+
+		if(nombre == null || nombre === '' || descripcion == null || descripcion === '' ){
+			$('#mensajeError').show();
+			return;
+		}else{
+			$('#mensajeError').hide();
+		}
+		console.log('click en el boton agregar');
+		agregarComentario();
+
+		$('#nombreBloque').val('');
+		$('#descripcionBloque').val('');		
+	})
+
+	
+
+
+	
+	$('#crear').on('click',function () {
+    console.log('click en submit');
+		
+
+		var card = $('.card');
+		console.log(card);
+		if(card.length > 1){
+			console.log(card.length);
+			console.log('entro en true')
+			$('#plantillaBloque').remove();
+			return true; 
+		}else if(card.length <= 1){
+			console.log('es 1');
+			console.log(card.length);
+			/* alertaEntreno(); */
+			toastr.error('El entrenamiento debe tener obligatoriamente al menos 1 bloque.');
+			return false;
+		}
+
+		
+		return false;
+	});	
+
+	
+		$('#bloques').on('click', "#btnClose", function(){
+		console.log('entro el btnclose');
+		var card = $(this).closest(".card-container");
+		console.log(card);
+		card.fadeOut(function(){
+			$(card).remove();
+		})
+		
+		
+		});
+	
+
+
+/* var div = $('<div>')
+		
+		var labelNombre = $('<input>', {
+			class: 'card-title fw-bold  form-control',
+			value: nombreBloque ,
+			disabled: true
+		})
+
+		var labelDescripcion = $('<textarea>',{
+			class: 'card-text form-control',
+			text: descripcionBloque,
+			disabled: true,
+			style: 'height: 150px',
+			name: "descripcion"
+		})
+
+
+		var card = $('<div>', {
+			class: 'card'
+		})
+
+		var cardBody = $('<div>', {
+			class: 'card-body text-center'
+		})
+
+		cardBody.append(labelNombre);
+		cardBody.append(labelDescripcion);
+
+		card.append(cardBody);
+
+		div.append(card);
+		
+		
+		$('#bloques').append(div); */
+
+</script>
+</body>
+</html>

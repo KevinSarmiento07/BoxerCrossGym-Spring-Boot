@@ -35,6 +35,5 @@ public class Bloque implements Serializable{
 
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Entrenamiento entrenamiento;
+    
 }

@@ -12,31 +12,73 @@
         <section class="content-header">
           <div class="container-fluid">
             <div class="row mb-2">
-              <h1 th:text="${titulo}" class="text-center fw-bold fs-1"></h1>
+              <h1 th:text="${titulo}" class="text-center fw-bold fs-1 font-monospace"></h1>
             </div>
           </div>
           <!-- /.container-fluid -->
         </section>
 
         <section class="content mt-1">
-          <form method="post" th:action="@{/entrenamiento/agregar}" th:object="${entrenamiento}">
+          <form method="post" th:action="@{/entrenamiento/agregar}" th:object="${entrenamiento}" >
             <div class="row">
               <div class="col-sm-6">
-                <div class="text-center">
+                <div class="">
                   <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingInput" placeholder="titulo" th:field="*{titulo}"/>
+                    <input type="text" class="form-control" id="floatingInput" placeholder="titulo" th:field="*{titulo}" th:errorclass="'form-control is-invalid '" required/>
                     <label for="floatingInput">Titulo</label>
+                    <div  th:if="${#fields.hasErrors('titulo')}"
+                    class="invalid-feedback fw-bold" th:errors="*{titulo}"></div>
                   </div>
 				  <div class="form-floating mb-3">
-                    <input type="date" class="form-control" id="floatingInput" placeholder="Fecha" th:field="*{fechaEntreno}"/>
+                    <input type="date" class="form-control" id="floatingInput" placeholder="Fecha" th:field="*{fechaEntreno}" th:errorclass="'form-control is-invalid'" required/>
                     <label for="floatingInput">Fecha</label>
+                    <div th:if="${#fields.hasErrors('fechaEntreno')}" class="invalid-feedback fw-bold" th:errors="*{fechaEntreno}"></div>
                   </div>
+				  
                 </div>
+
+
+				<div>
+
+					<h3 class="text-center fw-bold my-3 font-monospace">BLOQUES</h3>
+					<div class="form-floating mb-3">
+						<input type="text" class="form-control" id="nombreBloque" placeholder="Nombre" >
+						<label for="nombreBloque">Nombre</label>
+					  </div>
+					<div class="form-floating mb-3">
+						<textarea class="form-control" placeholder="Leave a comment here" id="descripcionBloque" style="height: 150px" ></textarea>
+						<label for="descripcionBloque">Descripcion</label>
+					</div>
+          <div id="mensajeError" class="my-3" style="color: red; display: none;">Nombre y descripción no pueden estar vacios.</div>
+
+          <div class="d-grid justify-content-sm-center ">
+            <button type="button" class="btn btn-primary " id="btnAgregar">Agregar Bloque</button>
+            
+          </div>
+					
+				</div>
               </div>
 
 
-              <div class="col-sm-6">
-				<button class="btn btn-primary" type="submit">Crear</button>
+              <div th:replace ="~{admin/js/plantilla-bloques.html :: plantilla-bloques}">
+
+              </div>
+
+          <div class="col-sm-6">
+
+				
+
+				
+
+				<div id="bloques">
+
+
+				</div>
+
+        <div class="d-grid justify-content-sm-center my-3">
+          <input class="btn btn-primary" type="submit" id="crear" value="Crear" />
+        </div>
+				
 			  </div>
 
 
@@ -48,6 +90,7 @@
 
       <footer th:replace="~{layout/plantillaAdmin.html :: footer}"></footer>
       <section th:replace="~{layout/plantillaAdmin.html :: scripts}"></section>
+      <script th:replace="~{admin/js/manejo-bloques.html :: manejo-bloques}"></script>
     </div>
   </body>
 </html>

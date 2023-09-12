@@ -48,7 +48,8 @@ public class Entrenamiento implements Serializable{
     private Date fechaEntreno;
 
 
-    @OneToMany(mappedBy = "entrenamiento", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany( fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "entrenamiento_id")
     private List<Bloque> bloques;
 
 

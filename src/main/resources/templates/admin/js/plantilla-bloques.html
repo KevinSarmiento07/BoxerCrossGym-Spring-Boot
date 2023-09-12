@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+
+	<div class="d-none" th:fragment="plantilla-bloques">
+
+		<div id="plantillaBloque">
+
+			<div class="card" id="cardPlantilla">
+				<div class="d-grid justify-content-sm-end">
+					<button id="btnClose" type="button" class="btn-close" ></button>
+					
+				</div>
+				
+				<div class="card-body">
+	
+					<input type="text" value="{NOMBRE}" name="nombres[]" class="card-title fw-bold  form-control"  readonly>
+					<textarea id="descripcion" name="descripciones[]"  class="card-text form-control" style="resize: none;"  readonly>{DESCRIPCION}</textarea>
+					<!-- style="height: auto;resize: none;  overflow: hidden;" -->
+				</div>
+	
+			</div>
+
+		</div>
+
+	</div>
+</body>
+</html>

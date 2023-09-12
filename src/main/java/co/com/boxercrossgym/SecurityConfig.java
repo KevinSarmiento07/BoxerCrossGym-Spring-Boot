@@ -36,7 +36,7 @@ public class SecurityConfig{
 		System.out.println("ENTRO EN FILERCHAIN");
 		http.authorizeHttpRequests((authz) -> {
 			try {
-				authz.requestMatchers("/css/**", "/js/**", "/images/**", "/adminlte/**", "/fontawesome/**", "/agregar/**", "/entrenamiento/**").permitAll()
+				authz.requestMatchers("/css/**", "/js/**", "/images/**", "/adminlte/**", "/fontawesome/**", "/agregar/**").permitAll()
 				/*.requestMatchers("/listar/**", "/").hasRole("USER")*/
 				.requestMatchers("/uploads/**").hasRole("USER")
 				.requestMatchers("/eliminar/**").hasRole("ADMIN")
