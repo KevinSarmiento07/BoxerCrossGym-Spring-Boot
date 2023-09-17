@@ -166,7 +166,15 @@
 
 		<footer th:replace="~{layout/plantillaAdmin.html :: footer}"></footer>
 		<section th:replace="~{layout/plantillaAdmin.html :: scripts}"></section>
-
+		<script>
+		$(document).ready(function() {
+			$("#selectPlan").change(function() {
+				var selectedOption = $(this).find(":selected");
+				var valorPlan = selectedOption.data("valor");
+				$("#valorPlanInput").val(valorPlan);
+			});
+		});
+	</script>
 	</div>
 
 </body>
